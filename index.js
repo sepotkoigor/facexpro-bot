@@ -1,25 +1,22 @@
-const express = require("express");
-const app = express();
+import TelegramBot from "node-telegram-bot-api";
+import fetch from "node-fetch";
 
-app.use(express.json());
+const bot = new TelegramBot(process.env.BOT_TOKEN, { polling: true });
 
-// ✅ приймає постбек від Propeller
-app.post("/postback", (req, res) => {
-  console.log("NEW POSTBACK:", req.body);
-  res.sendStatus(200);
+const CHANNEL_LINK = "https://t.me/your_channel_here";
+
+bot.onText(/\/start(.*)/, async (msg, match) => {
+  const chatId = msg.chat.id;
+
+  const subid = match[1]?.trim() || "no_subid";
+
+  // ✅ постбек
+  fetch(`http://ad.propellerads.com/conversion.php?aid=3519440&pid=&tid=103279&visitor_id=${subid}&payout=0`)
+    .catch(() => {});
+
+  // ✅ моментально відправляємо на канал
+  bot.sendMessage(chatId, `👇 Приєднуйся\n${CHANNEL_LINK}`);
 });
 
-// ✅ редірект людей прямо в канал
-app.get("/", (req, res) => {
-  res.redirect("https://t.me/FaceXpro");
-});
+console.log("✅ Bot is running");
 
-// ✅ запуск на Railway
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, "0.0.0.0", () => {
-  console.log(`✅ Server running on port ${PORT}`);
-});
-
-app.listen(PORT, "0.0.0.0", () => {
-  console.log(`✅ Server running on port ${PORT}`);
-});

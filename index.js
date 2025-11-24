@@ -7,7 +7,6 @@ const CHANNEL_LINK = "https://t.me/your_channel_here";
 
 bot.onText(/\/start(.*)/, async (msg, match) => {
   const chatId = msg.chat.id;
-
   const subid = match[1]?.trim() || "no_subid";
 
   // ✅ постбек
@@ -19,4 +18,3 @@ bot.onText(/\/start(.*)/, async (msg, match) => {
 });
 
 console.log("✅ Bot is running");
-
